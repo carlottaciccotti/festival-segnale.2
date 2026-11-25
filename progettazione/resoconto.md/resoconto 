@@ -1,0 +1,9 @@
+## Sessione 1
+- Che cosa ho chiesto: aiuto per completare i file JSON degli eventi e delle sedi.
+- Che cosa ho usato: i dati già presenti nei JSON, gli eventi incollati da `programma.html` e sedi e indirizzi incollati da `info.html`.
+- Che cosa ho modificato: proposti i JSON completi con sei eventi, tre sedi e riferimenti `sede_id`.
+- Come ho verificato: controllata la corrispondenza tra i sei eventi, le tre sedi e gli ID delle sedi.
+- Problemi e soluzioni: il contenuto dei file `programma.html` e `info.html` era indicato come vuoto alla fine del messaggio, ma i relativi HTML erano inclusi sopra; sono stati usati quei contenuti.
+- **Richiesta:** aggiungere il meteo attuale di Torino senza modificare galleria o mappa.
+- **Modifiche:** inserito in `info.html` il riquadro meteo con attribuzione e nota che chiarisce che non è una previsione per il festival; aggiunto uno script che recupera temperatura, vento e orario da Open-Meteo.
+- **Verifica:** controllare la sezione in Live Preview. In caso di errore, la pagina mostra un messaggio di indisponibilità.

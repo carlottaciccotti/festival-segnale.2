@@ -91,9 +91,73 @@
       </div>
       <p class="reading-text teaching-note">Il festival, gli eventi e l’uso delle sedi sono immaginari. Le sedi reali sono utilizzate come riferimento per l’esercitazione; il sito non annuncia un evento del Politecnico.</p>
     </section>
+    <section class="content-section" aria-labelledby="titolo-meteo">
+  <p class="eyebrow">Aggiornamento in tempo reale</p>
+  <h2 id="titolo-meteo">Meteo a Torino adesso</h2>
+
+  <div class="venue-address">
+    <p id="meteo-dato" role="status" aria-live="polite">Caricamento del meteo…</p>
+    <p class="reading-text">È il meteo di oggi, non una previsione per le date del festival.</p>
+    <p class="event-meta">
+      Dati meteo:
+      <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>,
+      licenza <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
+    </p>
+  </div>
+</section>
   </main>
   <footer class="site-footer"><div class="container"><p>Segnale · Progetto didattico · Festival immaginario</p></div></footer>
   <script src="https://cdn.jsdelivr.net/npm/swiper@14.4.0/swiper-bundle.min.js"></script>
   <script src="galleria.js"></script>
+<script>
+  async function caricaMeteo() {
+    const elemento = document.getElementById("meteo-dato");
+
+    try {
+      const parametri = new URLSearchParams({
+        latitude: "45.0703",
+        longitude: "7.6869",
+        current: "temperature_2m,wind_speed_10m",
+        temperature_unit: "celsius",
+        wind_speed_unit: "kmh",
+        timezone: "Europe/Rome"
+      });
+
+      const risposta = await fetch(
+        `https://api.open-meteo.com/v1/forecast?${parametri}`
+      );
+
+      if (!risposta.ok) {
+        throw new Error("Risposta meteo non valida");
+      }
+
+      const dati = await risposta.json();
+      const corrente = dati.current;
+
+      if (
+        !corrente ||
+        corrente.temperature_2m == null ||
+        corrente.wind_speed_10m == null ||
+        !corrente.time
+      ) {
+        throw new Error("Dati meteo incompleti");
+      }
+
+      const orario = new Intl.DateTimeFormat("it-IT", {
+        dateStyle: "short",
+        timeStyle: "short",
+        timeZone: "Europe/Rome"
+      }).format(new Date(corrente.time));
+
+      elemento.textContent =
+        `${corrente.temperature_2m} °C · vento ${corrente.wind_speed_10m} km/h · aggiornato alle ${orario}`;
+    } catch (errore) {
+      elemento.textContent = "Dati meteo non disponibili al momento.";
+      console.error("Errore nel caricamento del meteo:", errore);
+    }
+  }
+
+  caricaMeteo();
+</script>
 </body>
 </html>
